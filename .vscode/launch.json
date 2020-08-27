@@ -5,7 +5,42 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch 'a'",
+            "name": "(gdb) Attach to multistrdiff",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "${workspaceFolder}/multistrdiff",
+            "processId": "${command:pickProcess}",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "(gdb) Launch B",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/b",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": ""
+        },
+        {
+            "name": "(gdb) Launch A",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/a",
