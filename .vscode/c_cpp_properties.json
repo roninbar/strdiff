@@ -7,7 +7,8 @@
                 "~/projects"
             ],
             "defines": [
-                "__USE_POSIX"
+                "__USE_POSIX",
+                "__USE_MISC"
             ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c99",

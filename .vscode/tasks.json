@@ -8,8 +8,7 @@
 			"args": [
 				"-g",
 				"-D__USE_POSIX",
-				"-I",
-				"~/projects",
+				"-D__USE_MISC",
 				"${file}",
 				"${workspaceFolder}/mystrlib.o",
 				"-o",

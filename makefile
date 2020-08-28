@@ -1,6 +1,6 @@
 
 CC = gcc
-CFLAGS  = -Wall -g -I ~/projects -D __USE_POSIX
+CFLAGS  = -Wall -g -D __USE_POSIX -D__USE_MISC
 
 all: mystrdiff multistrdiff a b
 
