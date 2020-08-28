@@ -57,12 +57,16 @@ int main(int argc, char *argv[])
         // Read from stdin and write to child.
         while (NULL != mygets(str1, STRLEN) && NULL != mygets(str2, STRLEN))
         {
-            char line[STRLEN + 1];
-            fprintf(fToChild, "%s\n", str1);
-            fprintf(fToChild, "%s\n", str2);
-            fgets(line, STRLEN + 1, fFromChild);
-            fputs(line, stdout);
+            if (0 < fprintf(fToChild, "%s\n", str1) && 0 < fprintf(fToChild, "%s\n", str2) && 0 == fflush(fToChild))
+            {
+                // Read the result back from the child and write it to stdout.
+                char line[STRLEN + 1];
+                fgets(line, STRLEN + 1, fFromChild);
+                fputs(line, stdout);
+            }
         }
+
+        fclose(fToChild);
 
         waitpid(pid, &status, 0);
         if (WIFEXITED(status))
