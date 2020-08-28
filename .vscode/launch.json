@@ -36,8 +36,7 @@
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }
-            ],
-            "preLaunchTask": ""
+            ]
         },
         {
             "name": "(gdb) Launch A",
