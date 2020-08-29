@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
             }
         }
 
+        fclose(fFromChild);
         fclose(fToChild);
 
         waitpid(pid, &status, 0);
