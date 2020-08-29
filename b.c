@@ -29,13 +29,15 @@ int main(int argc, char *argv[])
 
     case 0: // In the child process:
 
-        // Close unneeded file descriptors.
-        close(toChild[1]);
-        close(fromChild[0]);
-
         // Redirect stdin and stdout to the pipes.
         dup2(toChild[0], STDIN_FILENO);
         dup2(fromChild[1], STDOUT_FILENO);
+
+        // Close original pipe file descriptors.
+        close(toChild[0]);
+        close(toChild[1]);
+        close(fromChild[0]);
+        close(fromChild[1]);
 
         // Exec
         execl("multistrdiff", "multistrdiff", NULL);
@@ -54,39 +56,30 @@ int main(int argc, char *argv[])
         fToChild = fdopen(toChild[1], "w");
         fFromChild = fdopen(fromChild[0], "r");
 
-        // Read from stdin and write to child.
+        // Read two input strings from stdin.
         while (NULL != mygets(str1, STRLEN) && NULL != mygets(str2, STRLEN))
         {
-            if (0 < fprintf(fToChild, "%s\n", str1) && 0 < fprintf(fToChild, "%s\n", str2) && 0 == fflush(fToChild))
-            {
-                // Read the result back from the child and write it to stdout.
-                char line[STRLEN + 1];
-                fgets(line, STRLEN + 1, fFromChild);
-                fputs(line, stdout);
-            }
+            char line[STRLEN + 1];
+
+            // Send the strings to the child.
+            fprintf(fToChild, "%s\n", str1);
+            fprintf(fToChild, "%s\n", str2);
+            fflush(fToChild);
+
+            // Read the result back from the child and write it to stdout.
+            fgets(line, STRLEN + 1, fFromChild);
+            fputs(line, stdout);
         }
 
         fclose(fFromChild);
         fclose(fToChild);
 
         waitpid(pid, &status, 0);
-        if (WIFEXITED(status))
-        {
-            if (WEXITSTATUS(status) != 0)
-            {
-                fprintf(stderr, "Child exited with status %d\n", WEXITSTATUS(status));
-            }
-        }
-        else if (WIFSIGNALED(status))
-        {
-            fprintf(stderr, "Child process %d terminated abnormally (because of signal %d).\n", pid, WTERMSIG(status));
+        if (!WIFEXITED(status) || 0 != WEXITSTATUS(status)) {
+            fprintf(stderr, "Child process (PID %d) terminated abnormally.\n", pid);
             return 1;
         }
-        else
-        {
-            fprintf(stderr, "Child process %d terminated for an unknown reason.\n", pid);
-            return 1;
-        }
+        
         break;
     }
 
