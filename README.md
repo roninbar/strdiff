@@ -17,7 +17,6 @@ int main(int argc, char *argv[])
   while ((mygets(str1, STRLEN) != NULL) && (mygets(str2, STRLEN) != NULL))
   {
     printf("%d\n", mystrdiff(str1, str2));
-    fflush(stdout);
   }
   return 0;
 }
